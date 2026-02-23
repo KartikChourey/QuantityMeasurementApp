@@ -23,7 +23,10 @@ public class Length {
 	}
 	
 	// constructor to initialize length and unit
-	public Length(double value, LengthUnit unit) {		
+	public Length(double value, LengthUnit unit) {	
+		if(unit == null) throw new IllegalArgumentException("Enter a valid length unit");
+		if(!Double.isFinite(value)) throw new IllegalArgumentException("Enter a valid double value for conversion");
+
 		this.value = value;
 		this.unit = unit;
 	}
@@ -35,10 +38,22 @@ public class Length {
 	
 	// compare two length object
 	public boolean compare(Length thatLength) {
+		if(thatLength == null) return false;
+		
 		double currentBaseLength = this.convertToBaseUnit();
 		double thatBaseLength = thatLength.convertToBaseUnit();
 		
 		return Double.compare(currentBaseLength, thatBaseLength) == 0;
+	}
+	
+	// convert to other unit
+	public Length convertTo(LengthUnit targetUnit) {
+		if(targetUnit == null) throw new IllegalArgumentException("Enter a valid unit for conversion");
+		
+		double toBaseUnit = this.convertToBaseUnit();
+		double resultantValue = toBaseUnit / targetUnit.getConversionFactor();
+		
+		return new Length(resultantValue, targetUnit);
 	}
 	
     @Override
@@ -51,10 +66,24 @@ public class Length {
         return compare(thatLength);
     }
     
+    @Override
+    public String toString() {
+    	return this.value + "" + unit;
+    }
+    
     public static void main(String[] args) {
         Length length1 = new Length(1.0, LengthUnit.FEET);
         Length length2 = new Length(12.0, LengthUnit.INCHES);
-
         System.out.println("Are lengths equal : " + length1.equals(length2));
+        
+        Length length3 = new Length(1.0, LengthUnit.YARDS);
+        Length length4 = new Length(36.0, LengthUnit.INCHES);
+        System.out.println("Are lengths equal : " + length3.equals(length4));
+        
+        Length length5 = new Length(100.0, LengthUnit.CENTIMETERS);
+        Length length6 = new Length(39.3701, LengthUnit.INCHES);
+        System.out.println("Are lengths equal : " + length5.equals(length6));
+        
+        System.out.println("36 Inches to equals to : " + length4.convertTo(LengthUnit.YARDS));
     }
 }
