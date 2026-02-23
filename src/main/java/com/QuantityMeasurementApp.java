@@ -1,6 +1,12 @@
 package com;
+import com.*;
 
 public class QuantityMeasurementApp {
+	
+	// Generic method to demonstrate length equality check
+    public static boolean demonstrateLengthEquality(Length length1, Length length2) {
+    	return length1.equals(length2);
+    }
 	 public static class Feet {
 	        private final double value;
 
@@ -48,9 +54,16 @@ public class QuantityMeasurementApp {
 	    	
 	    	System.out.println("i1 equals i2: " + i1.equals(i2));
 	    }
+	    public static void demonstrateFeetInchesComparasion() {
+	    	Length feet = new Length(1, LengthUnit.FEET);
+	    	Length inch = new Length(12, LengthUnit.INCHES);
+	    	
+	    	System.out.println("Feet equals Inch ? " + demonstrateLengthEquality(feet, inch));
+	    }
 	    
 	    public static void main(String[] args) {
 	    	demonstrateFeetEquality();
 	    	demonstrateInchEquality();
+	    	demonstrateFeetInchesComparasion();
 	    }
 }
