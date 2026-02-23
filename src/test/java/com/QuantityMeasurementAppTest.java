@@ -3,9 +3,10 @@ package com;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
-import com.QuantityMeasurementApp.Feet;
+import com.QuantityMeasurementApp.*;
 
 public class QuantityMeasurementAppTest {
+   
     @Test
     public void testFeetEquality_SameValue() {
         Feet firstValue = new Feet(1.0);
@@ -41,5 +42,42 @@ public class QuantityMeasurementAppTest {
         Feet feet = new Feet(1.0);
 
         assertTrue(feet.equals(feet));
+    }
+    
+    @Test
+    public void testInchesEquality_SameValue() {
+    	Inches i1 = new Inches(5.0);
+    	Inches i2 = new Inches(5.0);
+    	
+    	assertTrue(i1.equals(i2));
+    }
+    
+    @Test
+    public void testInchesEquality_DiffrentValue() {
+    	Inches i1 = new Inches(5.0);
+    	Inches i2 = new Inches(6.0);
+    	
+    	assertFalse(i1.equals(i2));
+    }
+    
+    @Test
+    public void testInchesEquality_NullComparison() {
+    	Inches inch = new Inches(5.0);
+    	
+    	assertFalse(inch.equals(null));
+    }
+    
+    @Test
+    public void testInchesEquality_DiffrentClass() {
+    	Inches inch = new Inches(5.0);
+    	
+    	assertFalse(inch.equals("1"));
+    }
+    
+    @Test
+    public void testInchesEquality_SameReference() {
+    	Inches inch = new Inches(5.0);
+    	
+    	assertTrue(inch.equals(inch));
     }
 }
