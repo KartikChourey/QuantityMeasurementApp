@@ -72,5 +72,3 @@ Quantity-Measurement
 
 ---
 
-🔗 *Code Link:*  
-👉 [UC-1](https://github.com/keshavvyadavv/Quantity-Measurement/tree/feature/UC1-FeetEquality)
