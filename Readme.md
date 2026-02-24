@@ -6,46 +6,6 @@ Designed using SOLID principles, DRY architecture, functional interfaces, and ty
 
 ---
 
-```
-## 📂 Folder Structure
-
-Quantity-Measurement
-│
-├── .mvn/
-│
-├── src/
-│   ├── main/
-│   │   └── java/
-│   │       └── com/
-│   │           └── apps/
-│   │               └── quantitymeasurement/
-│   │                   ├── app/
-│   │                   │   └── QuantityMeasurementApp.java
-│   │                   │
-│   │                   └── domain/
-│   │                       ├── IMeasurable.java
-│   │                       └── LengthUnit.java
-│   │                       └── SupportsArithmetic.java
-│   │                       └── TemperatureUnit.java
-│   │                       └── VolumeUnit.java
-│   │                       └── WeightUnit.java
-│   │                       └── Quantity.java
-│   │
-│   └── test/
-│       └── java/
-│           └── com/
-│               └── apps/
-│                   └── quantitymeasurement/
-│                       └── domain/
-│                           └── QuantityTest.java
-│
-├── .gitignore
-├── pom.xml
-└── README.md
-
-```
-
----
 
 # UC1-FeetEquality
 
