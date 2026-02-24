@@ -1,74 +1,367 @@
- Quantity Measurement App
+# Quantity-Measurement
 
-A Java-based application that performs quantity measurement, unit comparison, addition, and conversion across different measurement types like Length and Weight.
+A scalable, generic measurement system built using Java Generics and interfaces.
+Supports Length, Weight, Volume, and Temperature with unit conversion, equality comparison, and selective arithmetic operations.
+Designed using SOLID principles, DRY architecture, functional interfaces, and type-safe generics for extensibility and maintainability.
 
-This project follows clean coding principles, DRY design, and is developed using feature-based branches (UC-wise implementation).
+---
 
- Features Implemented
- UC1 – Feet Equality
+```
+## 📂 Folder Structure
 
-Compare two values in feet.
+Quantity-Measurement
+│
+├── .mvn/
+│
+├── src/
+│   ├── main/
+│   │   └── java/
+│   │       └── com/
+│   │           └── apps/
+│   │               └── quantitymeasurement/
+│   │                   ├── app/
+│   │                   │   └── QuantityMeasurementApp.java
+│   │                   │
+│   │                   └── domain/
+│   │                       ├── IMeasurable.java
+│   │                       └── LengthUnit.java
+│   │                       └── SupportsArithmetic.java
+│   │                       └── TemperatureUnit.java
+│   │                       └── VolumeUnit.java
+│   │                       └── WeightUnit.java
+│   │                       └── Quantity.java
+│   │
+│   └── test/
+│       └── java/
+│           └── com/
+│               └── apps/
+│                   └── quantitymeasurement/
+│                       └── domain/
+│                           └── QuantityTest.java
+│
+├── .gitignore
+├── pom.xml
+└── README.md
 
-Validate equality using proper unit handling.
+```
 
- UC2 – Inch Equality
+---
 
-Compare inch values.
+# UC1-FeetEquality
 
-Supports cross-unit comparison (e.g., feet to inch).
+## Features
 
-UC3 – Generic Quantity Class (DRY Principle)
+- Immutable `Feet` class  
+- Factory method `fromString()`  
+- Custom exception `InvalidFeetException`  
+- Proper `equals()` and `hashCode()` implementation  
+- Unit testing using JUnit 5  
 
-Implemented a reusable Quantity class.
+## Test Cases Covered
 
-Avoids code duplication.
+- Same value comparison  
+- Different value comparison  
+- Null comparison  
+- Different type comparison  
+- Valid string input  
+- Invalid string input (Exception case)  
 
-Centralized unit handling logic.
+---
 
-UC4 – Yard Equality
+## Technologies Used
 
-Compare yard values.
+- Java  
+- JUnit 5
 
-Supports cross-unit comparison.
 
-UC5 – Unit Conversion
 
-Convert values between units.
+---
 
-Example:
+# UC2 - Equality Comparison
 
-Feet → Inch
+This use case implements equality comparison for:
 
-Yard → Feet
+- Feet
+- Inches
 
-UC6 – Unit Addition
+Objects are created using:
+Feet.fromString("1.0");
+Inches.fromString("1.0");
 
-Add two quantities.
+Invalid numeric input throws a custom exception.
 
-Handles unit normalization before addition.
+## Equality Rules
+- Same value → true
+- Different value → false
+- Null → false
+- Same reference → true
+- Different class → false
 
-UC7 – Target Unit Addition
+## Tech
+Java, JUnit 5
 
-Add quantities and return result in a specified target unit.
 
-UC8 – Standalone Unit Handling
 
-Unit abstraction implemented.
+---
 
-Clean separation of logic.
+# UC3 – Generic Quantity Class (DRY Principle)
 
-UC9 – Weight Measurement
+## Description
+UC3 refactors separate `Feet` and `Inches` classes into a single generic `Quantity` class using a `LengthUnit` enum.  
+This eliminates code duplication and follows the DRY principle.
 
-Added support for weight units.
+## How It Works
+- User enters value and unit (feet/inch).
+- Values are converted to a common base unit (feet).
+- Equality is checked using value-based comparison.
 
-Example:
+## Key Concepts
+- DRY Principle
+- Enum Usage
+- Encapsulation
+- Abstraction
+- Proper equals() contract
+- Cross-unit comparison (1 foot = 12 inches)
 
-Gram
 
-Kilogram
 
-UC10 – Generic Quantity Extension
+---
 
-Fully generic measurement handling.
+# Quantity Measurement – UC4
 
-Supports multiple measurement types.
+## Supported Units
+
+* Feet
+* Inch
+* Yard
+* Centimeter
+
+## Features
+
+* Takes input from user
+* Converts units internally
+* Checks if two values are equal
+* Supports cross-unit comparison
+
+## Example
+
+1 Feet = 12 Inch
+3 Feet = 1 Yard
+2.54 Centimeter = 1 Inch
+
+
+---
+
+# UC5 – Unit-to-Unit Conversion
+
+UC5 adds direct conversion between length units using a common base unit.
+
+## Supported Units
+
+FEET, INCHES, YARDS, CENTIMETERS
+
+## Features
+
+* Static `convert(value, source, target)` method
+* Instance `convertTo()` method
+* Base unit normalization
+* Input validation (null, NaN, infinite)
+* Immutable value object
+
+## Formula
+
+```
+result = value × (source.factor / target.factor)
+```
+
+## Example
+
+* 1 FEET → INCHES = 12
+* 3 YARDS → FEET = 9
+* 36 INCHES → YARDS = 1
+
+
+---
+
+# UC6 – Addition of Two Length Units
+
+UC6 extends UC5 by adding support for **addition of two length measurements** (same category).
+
+## Supported Units
+
+FEET, INCHES, YARDS, CENTIMETERS
+
+## Features
+
+* Add two `Length` objects
+* Automatic unit conversion before addition
+* Result returned in unit of first operand
+* Uses base unit normalization (FEET)
+* Immutable design (returns new object)
+* Input validation for null, NaN, infinite values
+
+## Logic
+
+1. Convert both lengths to base unit (FEET)
+2. Add values
+3. Convert sum back to first operand’s unit
+4. Return new `Length` object
+
+## Example
+
+* 1 FEET + 2 FEET = 3 FEET
+* 1 FEET + 12 INCHES = 2 FEET
+* 12 INCHES + 1 FEET = 24 INCHES
+* 1 YARD + 3 FEET = 2 YARDS
+
+
+---
+
+# Quantity Measurement – UC7
+
+## Description
+
+This project performs **length addition and unit conversion** using OOP principles in Java.
+
+## Supported Units
+
+* FEET
+* INCHES
+* YARDS
+* CENTIMETERS
+
+## Features
+
+* Add two quantities
+* Automatic unit conversion
+* Result in chosen target unit
+* Equality comparison using base unit (FEET)
+* Immutable design
+* Input validation
+
+## Example
+
+```
+1 FEET + 12 INCHES
+
+Output:
+2.0 feet
+24.0 inches
+0.6666666666666666 yards
+```
+
+## Design
+
+* Base unit: FEET
+* Uses conversion factors
+* EPSILON-based equality comparison
+
+
+
+---
+
+# UC8 – Standalone LengthUnit Refactoring
+
+## Description
+
+UC8 refactors the design by extracting `LengthUnit` into a standalone enum and assigning it full responsibility for unit conversions.
+
+## Key Improvements
+
+* `LengthUnit` handles all conversion logic
+* `Quantity` handles comparison and arithmetic
+* Follows Single Responsibility Principle (SRP)
+* Removes circular dependency risk
+* Improves scalability for future units (Weight, Volume, etc.)
+* Fully backward compatible with UC1–UC7
+
+## Supported Units
+
+* FEET
+* INCHES
+* YARDS
+* CENTIMETERS
+
+## Example Output
+
+```
+Convert 1 FEET to INCHES:
+12.0 inches
+
+Add 1 FEET + 12 INCHES (in FEET):
+2.0 feet
+
+Add 1 FEET + 12 INCHES (in YARDS):
+0.6666666666666666 yards
+
+36 INCHES equals 1 YARDS?
+true
+```
+
+## Architecture
+
+* Base Unit: FEET
+* Conversion delegated to `LengthUnit`
+* Equality uses epsilon comparison
+* Immutable design
+
+
+
+---
+
+# UC9 – Weight Measurement
+
+## Description
+UC9 extends the Quantity Measurement Application to support **Weight Measurements** alongside Length.
+
+Supported Units:
+- **KILOGRAM (kg)** – Base unit
+- **GRAM (g)** – 1 g = 0.001 kg
+- **POUND (lb)** – 1 lb = 0.453592 kg
+
+## Features
+- Equality comparison (cross-unit supported)
+- Unit conversion
+- Addition (implicit & explicit target unit)
+- Immutable design
+- Type-safe (Weight ≠ Length)
+- Uses epsilon (1e-6) for floating-point precision
+
+## Conclusion
+UC9 validates scalable architecture by supporting multiple measurement categories without affecting existing length functionality.
+
+
+
+---
+
+# UC10 – Generic Quantity
+
+## Description
+UC10 refactors UC9 into a single generic class:
+
+`Quantity<U extends IMeasurable>`
+
+This removes duplication and makes the system scalable and maintainable.
+
+---
+
+## Improvements
+- Single generic `Quantity` class
+- Common `IMeasurable` interface
+- Supports multiple categories (Length, Weight)
+- No duplicate logic (DRY)
+- Type-safe and immutable
+
+---
+
+## Features
+- Equality comparison
+- Unit conversion
+- Addition (with optional target unit)
+- Prevents cross-category comparison
+
+
+
+
+---
+
