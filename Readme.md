@@ -61,7 +61,3 @@ Quantity-Measurement
 
 ## Tech
 Java, JUnit 5
-
-
-🔗 *Code Link:*  
-👉 [UC-2](https://github.com/keshavvyadavv/Quantity-Measurement/tree/feature/UC2-InchEquality)
