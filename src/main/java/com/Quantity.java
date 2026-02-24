@@ -1,19 +1,23 @@
 package com;
 
-public class Quantity<U extends IMeasurable> {
-    private double value;
-    private U unit;
+import java.util.Objects;
 
-    // Constructor
+public class Quantity<U extends IMeasurable> {
+
+    private final double value;
+    private final U unit;
+    private static final double EPSILON = 0.0001;
+
     public Quantity(double value, U unit) {
-        if (unit == null) throw new IllegalArgumentException("Unit cannot be null");
-        if (!Double.isFinite(value)) throw new IllegalArgumentException("Invalid numeric value");
+        if (unit == null)
+            throw new IllegalArgumentException("Unit cannot be null");
+        if (Double.isNaN(value) || Double.isInfinite(value))
+            throw new IllegalArgumentException("Invalid numeric value");
 
         this.value = value;
         this.unit = unit;
     }
 
-    // Getters
     public double getValue() {
         return value;
     }
@@ -22,87 +26,83 @@ public class Quantity<U extends IMeasurable> {
         return unit;
     }
 
-    // Convert to target unit
-    public double convertTo(U targetUnit) {
-        if (targetUnit == null) throw new IllegalArgumentException("Target cannot be null");
-        if (!unit.getClass().equals(targetUnit.getClass())) throw new IllegalArgumentException("Provide similar unit type for conversion");
+    public Quantity<U> convertTo(U targetUnit) {
+        if (targetUnit == null)
+            throw new IllegalArgumentException("Target unit cannot be null");
 
         double baseValue = unit.convertToBaseUnit(value);
-        return targetUnit.convertFromBaseUnit(baseValue);
+        double converted = targetUnit.convertFromBaseUnit(baseValue);
+        return new Quantity<>(round(converted), targetUnit);
     }
 
-    // Add and return in this unit
     public Quantity<U> add(Quantity<U> other) {
-        if (other == null) throw new IllegalArgumentException("Quantity to add cannot be null");
-        if (!unit.getClass().equals(other.unit.getClass())) throw new IllegalArgumentException("Provide similar unit type for conversion");
-
-        double base1 = unit.convertToBaseUnit(value);
-        double base2 = other.unit.convertToBaseUnit(other.value);
-        double totalBase = base1 + base2;
-
-        double result = unit.convertFromBaseUnit(totalBase);
-        return new Quantity<>(result, unit);
+        return add(other, this.unit);
     }
 
-    // Add and return in target unit
     public Quantity<U> add(Quantity<U> other, U targetUnit) {
-        if (other == null) throw new IllegalArgumentException("Quantity cannot be null");
-        if (targetUnit == null) throw new IllegalArgumentException("Target cannot be null");
-        if (!unit.getClass().equals(other.unit.getClass())) throw new IllegalArgumentException("Provide similar unit type for conversion");
-        if (!unit.getClass().equals(targetUnit.getClass())) throw new IllegalArgumentException("Provide similar unit type for conversion");
+        validateOperation(other);
 
-        double value1 = unit.convertToBaseUnit(value);
-        double value2 = other.unit.convertToBaseUnit(other.value);
-        double total = value1 + value2;
-        double result = targetUnit.convertFromBaseUnit(total);
-        
-        return new Quantity<>(result, targetUnit);
+        double baseResult =
+                this.unit.convertToBaseUnit(this.value) +
+                other.unit.convertToBaseUnit(other.value);
+
+        double finalValue = targetUnit.convertFromBaseUnit(baseResult);
+        return new Quantity<>(round(finalValue), targetUnit);
+    }
+
+    public Quantity<U> subtract(Quantity<U> other) {
+        return subtract(other, this.unit);
+    }
+
+    public Quantity<U> subtract(Quantity<U> other, U targetUnit) {
+        validateOperation(other);
+
+        double baseResult = this.unit.convertToBaseUnit(this.value) - other.unit.convertToBaseUnit(other.value);
+
+        double finalValue = targetUnit.convertFromBaseUnit(baseResult);
+        return new Quantity<>(round(finalValue), targetUnit);
+    }
+
+    public double divide(Quantity<U> other) {
+        validateOperation(other);
+
+        double divisorBase = other.unit.convertToBaseUnit(other.value);
+        if (Math.abs(divisorBase) < EPSILON)
+            throw new ArithmeticException("Division by zero");
+
+        double dividendBase = this.unit.convertToBaseUnit(this.value);
+        return round(dividendBase / divisorBase);
     }
 
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (obj == null) return false;
-        if (getClass() != obj.getClass()) return false;
+        if (!(obj instanceof Quantity)) return false;
 
-        Quantity<?> that = (Quantity<?>) obj;
-        if (!this.unit.getClass().equals(that.unit.getClass())) return false;
+        Quantity<?> other = (Quantity<?>) obj;
+
+        if (!this.unit.getClass().equals(other.unit.getClass())) return false;
 
         double base1 = this.unit.convertToBaseUnit(this.value);
-        double base2 = that.unit.convertToBaseUnit(that.value);
+        double base2 = other.unit.convertToBaseUnit(other.value);
 
-        return Double.compare(base1, base2) == 0;
+        return Math.abs(base1 - base2) < EPSILON;
     }
 
     @Override
-    public String toString() {
-        return value + "" + unit;
+    public int hashCode() {
+        return Objects.hash(unit.getClass(), unit.convertToBaseUnit(value));
     }
 
-    public static void main(String[] args) {
-        Quantity<LengthUnit> lengthInFeet = new Quantity<>(10.0, LengthUnit.FEET);
-        Quantity<LengthUnit> lengthInInches = new Quantity<>(120.0, LengthUnit.INCHES);
-        boolean isEqual = lengthInFeet.equals(lengthInInches);
-        System.out.println("Are lengths equal? " + isEqual);
-        System.out.println();
+    private void validateOperation(Quantity<U> other) {
+        if (other == null)
+            throw new IllegalArgumentException("Quantity cannot be null");
 
-        Quantity<WeightUnit> weightInKilograms = new Quantity<>(1.0, WeightUnit.KILOGRAM);
-        Quantity<WeightUnit> weightInGrams = new Quantity<>(1000.0, WeightUnit.GRAM);
-        isEqual = weightInKilograms.equals(weightInGrams);
-        System.out.println("Are weights equal?" + isEqual);
-        System.out.println();
+        if (!this.unit.getClass().equals(other.unit.getClass()))
+            throw new IllegalArgumentException("Cross-category operation not allowed");
+    }
 
-        double convertedLength = lengthInFeet.convertTo(LengthUnit.INCHES);
-        System.out.println("10 feet in inches " + convertedLength);
-        System.out.println();
-
-        Quantity<LengthUnit> totalLength = lengthInFeet.add(lengthInInches, LengthUnit.FEET);
-        System.out.println("Total Length in feet " + totalLength.getValue() + " " + totalLength.getUnit());
-        System.out.println();
-
-        Quantity<WeightUnit> weightInPounds = new Quantity<>(2.0, WeightUnit.POUND);
-        Quantity<WeightUnit> totalWeight = weightInKilograms.add(weightInPounds, WeightUnit.KILOGRAM);
-        System.out.println("Total Weight in kilograms " + totalWeight.getValue() + " " + totalWeight.getUnit());
-        System.out.println();
+    private double round(double value) {
+        return Math.round(value * 100.0) / 100.0;
     }
 }

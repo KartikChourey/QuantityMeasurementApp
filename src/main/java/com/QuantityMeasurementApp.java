@@ -1,49 +1,24 @@
 package com;
 
 public class QuantityMeasurementApp {
-    // Demonstrate Equality
-    public static <U extends IMeasurable> boolean demonstrateEquality(Quantity<U> quantity1, Quantity<U> quantity2) {
-        return quantity1.equals(quantity2);
-    }
 
-    // Demonstrate Conversion of a quantity
-    public static <U extends IMeasurable> Quantity<U> demonstrateConversion(Quantity<U> quantity, U targetUnit) {
-        double convertedValue = quantity.convertTo(targetUnit);
-        return new Quantity<>(convertedValue, targetUnit);
-    }
+	public static void main(String[] args) {
 
-    // Demonstrate Addition 
-    public static <U extends IMeasurable> Quantity<U> demonstrateAddition(Quantity<U> quantity1, Quantity<U> quantity2) {
-        return quantity1.add(quantity2);
-    }
+		Quantity<LengthUnit> length1 = new Quantity<>(10.0, LengthUnit.FEET);
+		Quantity<LengthUnit> length2 = new Quantity<>(6.0, LengthUnit.INCHES);
 
-    // Demonstrate Addition with provided return type unit
-    public static <U extends IMeasurable> Quantity<U> demonstrateAddition(Quantity<U> quantity1, Quantity<U> quantity2, U targetUnit) {
-        return quantity1.add(quantity2, targetUnit);
-    }
+		System.out.println("Subtract Length: " + length1.subtract(length2));
 
-    public static void main(String[] args) {
-        // Demonstration equality 
-        Quantity<WeightUnit> weightInGrams = new Quantity<>(1000.0, WeightUnit.GRAM);
-        Quantity<WeightUnit> weightInKilograms = new Quantity<>(1.0, WeightUnit.KILOGRAM);
-        boolean areEqual = demonstrateEquality(weightInGrams, weightInKilograms);
-        System.out.println("Are weights equal? " + areEqual);
-        System.out.println();
+		System.out.println("Subtract Explicit (Inches): " + length1.subtract(length2, LengthUnit.INCHES));
 
-        // Demonstration conversion 
-        Quantity<WeightUnit> convertedWeight = demonstrateConversion(weightInGrams, WeightUnit.KILOGRAM);
-        System.out.println("Converted Weight: " + convertedWeight.getValue() + "" + convertedWeight.getUnit());
-        System.out.println();
+		Quantity<WeightUnit> weight1 = new Quantity<>(10.0, WeightUnit.KILOGRAM);
+		Quantity<WeightUnit> weight2 = new Quantity<>(5.0, WeightUnit.KILOGRAM);
 
-        // Demonstration addition 
-        Quantity<WeightUnit> weightInPounds = new Quantity<>(2.20462, WeightUnit.POUND);
-        Quantity<WeightUnit> sumWeight = demonstrateAddition(weightInKilograms, weightInPounds);
-        System.out.println("Sum Weight: " + sumWeight.getValue() + "" + sumWeight.getUnit());
-        System.out.println();
+		System.out.println("Division Weight: " + weight1.divide(weight2));
 
-        // demonstration addition with target unit
-        Quantity<WeightUnit> sumWeightInGrams = demonstrateAddition(weightInKilograms, weightInPounds, WeightUnit.GRAM);
-        System.out.println("Sum Weight in Grams: " + sumWeightInGrams.getValue() + " " + sumWeightInGrams.getUnit());
-        System.out.println();
-    }
+		Quantity<VolumeUnit> volume1 = new Quantity<>(5.0, VolumeUnit.LITRE);
+		Quantity<VolumeUnit> volume2 = new Quantity<>(10.0, VolumeUnit.LITRE);
+
+		System.out.println("Division Volume: " + volume1.divide(volume2));
+	}
 }
