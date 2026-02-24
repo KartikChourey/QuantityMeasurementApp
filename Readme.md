@@ -14,42 +14,6 @@ A simple Java application to measure and compare quantities in **Feet** using cl
 
 ---
 
-```
-## 📂 Folder Structure
-
-Quantity-Measurement
-│
-├── .mvn/
-│
-├── src/
-│   ├── main/
-│   │   └── java/
-│   │       └── com/
-│   │           └── apps/
-│   │               └── quantitymeasurement/
-│   │                   ├── app/
-│   │                   │   └── QuantityMeasurementApp.java
-│   │                   │
-│   │                   └── domain/
-│   │                       ├── Feet.java
-│   │                       └── InvalidFeetException.java
-│   │
-│   └── test/
-│       └── java/
-│           └── com/
-│               └── apps/
-│                   └── quantitymeasurement/
-│                       └── domain/
-│                           └── FeetTest.java
-│
-├── .gitignore
-├── pom.xml
-└── README.md
-
-```
-
----
-
 ## Test Cases Covered
 
 - Same value comparison  
