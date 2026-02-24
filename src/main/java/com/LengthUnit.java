@@ -1,7 +1,6 @@
 package com;
 
 public enum LengthUnit implements IMeasurable{
-
     FEET(12.0),
     INCHES(1.0),
     YARDS(36.0),
@@ -17,17 +16,20 @@ public enum LengthUnit implements IMeasurable{
         return conversionFactor;
     }
 
+    // Convert value from this unit to base unit
     public double convertToBaseUnit(double value) {
         double result = value * conversionFactor;
-        return Math.round(result * 100.0) / 100.0;
+        return roundOffTillTwoDecimal(result);
     }
 
+    // Convert value from base unit (inches) to this unit
     public double convertFromBaseUnit(double baseValue) {
         double result = baseValue / conversionFactor;
-        return Math.round(result * 100.0) / 100.0;
+        return roundOffTillTwoDecimal(result);
     }
     
-    public String getUnitName() {
-    	return this.name();
+    // Round off till 2 decimal precision
+    private double roundOffTillTwoDecimal(double value) {
+    	return Math.round(value * 100.0) / 100.0;
     }
 }
