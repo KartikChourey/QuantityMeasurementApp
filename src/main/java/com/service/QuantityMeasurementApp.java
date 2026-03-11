@@ -1,4 +1,4 @@
-package com;
+package com.service;
 
 public class QuantityMeasurementApp {
     // Demonstrate Equality

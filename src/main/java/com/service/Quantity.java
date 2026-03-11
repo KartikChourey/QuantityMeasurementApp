@@ -1,4 +1,4 @@
-package com;
+package com.service;
 
 public class Quantity<U extends IMeasurable> {
     private double value;

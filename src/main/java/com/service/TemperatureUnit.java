@@ -1,4 +1,4 @@
-package com;
+package com.service;
 
 import java.util.function.Function;
 
