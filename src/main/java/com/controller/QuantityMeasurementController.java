@@ -1,5 +1,6 @@
-package com;
+package com.controller;
 
+import com.dto.QuantityDTO;
 import com.service.*;
 
 
@@ -14,9 +15,7 @@ public class QuantityMeasurementController {
         this.quantityMeasurementService = quantityMeasurementService;
     }
 
-    public boolean performComparison(QuantityDTO quantity1, QuantityDTO quantity2) {
-        return quantityMeasurementService.compare(quantity1, quantity2);
-    }
+  
 
     public QuantityDTO performConversion(QuantityDTO sourceQuantity, String targetUnit) {
         return quantityMeasurementService.convert(sourceQuantity, targetUnit);

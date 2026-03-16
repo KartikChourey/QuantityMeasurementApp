@@ -2,6 +2,7 @@ package com.repository;
 
 import java.util.List;
 
+import com.entity.QuantityMeasurementEntity;
 import com.service.*;
 
 public interface IQuantityMeasurementRepository {

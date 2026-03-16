@@ -3,6 +3,7 @@ package com.repository;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.entity.QuantityMeasurementEntity;
 import com.service.*;
 
 public class QuantityMeasurementCacheRepository implements IQuantityMeasurementRepository {
@@ -21,8 +22,7 @@ public class QuantityMeasurementCacheRepository implements IQuantityMeasurementR
         return instance;
     }
 
-    @Override
-    public void save(QuantityMeasurementEntity entity) {
+    public void save1(QuantityMeasurementEntity entity) {
         measurementCache.add(entity);
     }
 
@@ -30,4 +30,10 @@ public class QuantityMeasurementCacheRepository implements IQuantityMeasurementR
     public List<QuantityMeasurementEntity> findAll() {
         return new ArrayList<>(measurementCache);
     }
+
+	@Override
+	public void save(QuantityMeasurementEntity entity) {
+		// TODO Auto-generated method stub
+		
+	}
 }
