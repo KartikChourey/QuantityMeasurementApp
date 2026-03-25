@@ -9,11 +9,11 @@ import lombok.Data;
 @Data
 public class SignupDto {
 	@NotBlank
-	@Size(min = 2, max = 50, message = "name must be between 2 to 50 characters")
+	@Size(min = 2, max = 50)
 	private String name;
 	
 	@NotBlank
-	@Email(message = "Enter a valid email")
+	@Email
 	private String email;
 	
 	@NotBlank
